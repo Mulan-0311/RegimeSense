@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign Up - RegimeSense</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500;700&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed": "#001d33",
+                    "surface-container-high": "#262a30",
+                    "surface-container": "#1b2026",
+                    "on-error-container": "#ffdad6",
+                    "inverse-surface": "#dfe3ea",
+                    "primary": "#98cbff",
+                    "outline-variant": "#3f4852",
+                    "surface-tint": "#98cbff",
+                    "on-surface": "#dfe3ea",
+                    "surface-container-low": "#171c22",
+                    "secondary-fixed-dim": "#4edea3",
+                    "secondary-fixed": "#6ffbbe",
+                    "surface-container-lowest": "#0a0f14",
+                    "on-error": "#690005",
+                    "on-primary-fixed-variant": "#004a77",
+                    "secondary": "#4edea3",
+                    "regime-amber": "#ffba38",
+                    "inverse-primary": "#00629d",
+                    "background": "#0f1419",
+                    "primary-fixed-dim": "#98cbff",
+                    "error": "#ffb4ab",
+                    "surface-variant": "#30353b",
+                    "outline": "#3f4852",
+                    "inverse-on-surface": "#2c3137",
+                    "on-secondary": "#003824",
+                    "bearish-red": "#ff1744",
+                    "on-tertiary-container": "#522900",
+                    "secondary-container": "#00a572",
+                    "on-tertiary": "#4d2600",
+                    "on-secondary-fixed-variant": "#005236",
+                    "surface": "#0f1419",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "on-tertiary-fixed": "#2f1500",
+                    "bullish-green": "#10b981",
+                    "on-surface-variant": "#bec7d4",
+                    "primary-container": "#00a3ff",
+                    "surface-bright": "#353a40",
+                    "tertiary": "#ffb77d",
+                    "surface-dim": "#0f1419",
+                    "error-container": "#93000a",
+                    "on-primary-container": "#00375a",
+                    "primary-fixed": "#cfe5ff",
+                    "on-secondary-fixed": "#002113",
+                    "tertiary-container": "#eb8104",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "on-primary": "#003354",
+                    "tertiary-fixed": "#ffdcc3",
+                    "on-secondary-container": "#00311f",
+                    "on-background": "#dfe3ea",
+                    "surface-container-highest": "#30353b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-gap": "120px",
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "unit": "4px",
+                    "margin-mobile": "20px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "label-caps": ["Geist"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "data-mono": ["Geist"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.03em", "fontWeight": "700"}],
+                    "data-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Custom utility classes based on style guidance */
+        .glass-panel {
+            background-color: rgba(27, 32, 38, 0.7); /* surface-container with opacity */
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .glow-effect:focus-within {
+            box-shadow: 0 0 15px rgba(152, 203, 255, 0.2); /* primary color glow */
+        }
+        /* Custom radio button styles for cards */
+        .role-radio:checked + label {
+            border-color: #98cbff; /* primary */
+            background-color: rgba(152, 203, 255, 0.05);
+        }
+        .role-radio:checked + label .check-icon {
+            opacity: 1;
+        }
+        
+        /* Step transition animations */
+        .step-enter {
+            animation: fadeInRight 0.4s ease-out forwards;
+        }
+        .step-exit {
+            animation: fadeOutLeft 0.3s ease-in forwards;
+        }
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeOutLeft {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(-20px); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col antialiased selection:bg-primary/30 selection:text-primary">
+<!-- Note: TopNavBar and Footer are suppressed due to the Transactional intent of a Sign Up page -->
+<main class="flex-grow flex flex-col items-center justify-center p-margin-mobile md:p-margin-desktop relative overflow-hidden">
+<!-- Ambient Background Glow -->
+<div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[120px] pointer-events-none"></div>
+<!-- Simplified Header -->
+<div class="mb-10 text-center z-10">
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight font-bold">RegimeSense</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Institutional Grade Analytics</p>
+</div>
+<!-- Sign Up Container -->
+<div class="w-full max-w-[480px] bg-surface-container border border-outline-variant rounded-xl shadow-2xl relative z-10 overflow-hidden">
+<!-- Top Accent Line -->
+<div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-primary via-secondary to-primary opacity-80"></div>
+<div class="p-8 md:p-10">
+<!-- Progress Header -->
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold" id="form-title">Create Account</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1" id="form-subtitle">Step 1 of 2: Account Basics</p>
+</div>
+<!-- Progress Indicators -->
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-primary transition-colors duration-300" id="dot-step-1"></div>
+<div class="w-2 h-2 rounded-full bg-surface-variant transition-colors duration-300" id="dot-step-2"></div>
+</div>
+</div>
+<!-- FORM CONTAINER -->
+<form id="signup-form" action="dashboard.html" method="GET">
+<!-- ================= STEP 1: BASICS ================= -->
+<div class="space-y-6" id="step-1-content">
+<!-- Full Name -->
+<div class="space-y-2 glow-effect transition-shadow duration-200 rounded-lg">
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase" for="fullName">Full Name</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-variation-settings: 'FILL' 0;">person</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-colors" id="fullName" placeholder="Jane Doe" required="" type="text"/>
+</div>
+</div>
+<!-- Professional Email -->
+<div class="space-y-2 glow-effect transition-shadow duration-200 rounded-lg">
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase" for="workEmail">Professional Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-variation-settings: 'FILL' 0;">mail</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-colors" id="workEmail" placeholder="jane@institution.com" required="" type="email"/>
+</div>
+</div>
+<!-- Company -->
+<div class="space-y-2 glow-effect transition-shadow duration-200 rounded-lg">
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase" for="companyName">Company / Institution</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-variation-settings: 'FILL' 0;">domain</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-colors" id="companyName" placeholder="Capital Partners LLC" required="" type="text"/>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full bg-primary hover:bg-primary-fixed text-on-primary-fixed font-label-caps text-label-caps uppercase py-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-[0_0_15px_rgba(152,203,255,0.15)] hover:shadow-[0_0_25px_rgba(152,203,255,0.3)]" onclick="goToStep(2)" type="button">
+                                Continue
+                                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- ================= STEP 2: ROLE SELECTION ================= -->
+<div class="hidden space-y-4" id="step-2-content">
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Select your primary function to configure your terminal instance.</p>
+<!-- Role Cards -->
+<div class="space-y-3">
+<!-- Portfolio Manager -->
+<div class="relative">
+<input checked="" class="role-radio peer sr-only" id="role-pm" name="userRole" type="radio" value="pm"/>
+<label class="flex items-center p-4 cursor-pointer bg-surface-container-lowest border border-outline-variant rounded-lg hover:border-outline transition-colors relative overflow-hidden group" for="role-pm">
+<div class="w-10 h-10 rounded bg-primary/10 flex items-center justify-center text-primary mr-4 shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-body-md text-body-md text-on-surface font-semibold">Portfolio Manager</h3>
+<p class="font-data-mono text-data-mono text-on-surface-variant/70 text-xs mt-1">Macro trends &amp; risk allocation</p>
+</div>
+<span class="material-symbols-outlined text-primary opacity-0 transition-opacity check-icon ml-4" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</label>
+</div>
+<!-- Analyst -->
+<div class="relative">
+<input class="role-radio peer sr-only" id="role-analyst" name="userRole" type="radio" value="analyst"/>
+<label class="flex items-center p-4 cursor-pointer bg-surface-container-lowest border border-outline-variant rounded-lg hover:border-outline transition-colors relative overflow-hidden group" for="role-analyst">
+<div class="w-10 h-10 rounded bg-secondary/10 flex items-center justify-center text-secondary mr-4 shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">monitoring</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-body-md text-body-md text-on-surface font-semibold">Quantitative Analyst</h3>
+<p class="font-data-mono text-data-mono text-on-surface-variant/70 text-xs mt-1">Deep dives &amp; regime modeling</p>
+</div>
+<span class="material-symbols-outlined text-primary opacity-0 transition-opacity check-icon ml-4" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</label>
+</div>
+<!-- Developer / API -->
+<div class="relative">
+<input class="role-radio peer sr-only" id="role-dev" name="userRole" type="radio" value="dev"/>
+<label class="flex items-center p-4 cursor-pointer bg-surface-container-lowest border border-outline-variant rounded-lg hover:border-outline transition-colors relative overflow-hidden group" for="role-dev">
+<div class="w-10 h-10 rounded bg-tertiary/10 flex items-center justify-center text-tertiary mr-4 shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-body-md text-body-md text-on-surface font-semibold">Data Engineer / API</h3>
+<p class="font-data-mono text-data-mono text-on-surface-variant/70 text-xs mt-1">Infrastructure &amp; pipelines</p>
+</div>
+<span class="material-symbols-outlined text-primary opacity-0 transition-opacity check-icon ml-4" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</label>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex gap-4 pt-6">
+<button class="w-1/3 bg-transparent border border-outline hover:border-primary text-on-surface font-label-caps text-label-caps uppercase py-4 rounded-lg flex items-center justify-center transition-colors duration-200" onclick="goToStep(1)" type="button">
+                                Back
+                            </button>
+<button class="w-2/3 bg-primary hover:bg-primary-fixed text-on-primary-fixed font-label-caps text-label-caps uppercase py-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-[0_0_15px_rgba(152,203,255,0.15)] hover:shadow-[0_0_25px_rgba(152,203,255,0.3)]" type="submit">
+                                Initialize Account
+                                <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+<!-- Footer Link -->
+<div class="mt-8 text-center z-10">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Already have an account? 
+                <a class="text-primary hover:text-primary-fixed transition-colors font-semibold ml-1" href="signin.html">Sign In</a>
+</p>
+</div>
+</main>
+<script>
+        function goToStep(step) {
+            const step1 = document.getElementById('step-1-content');
+            const step2 = document.getElementById('step-2-content');
+            const dot1 = document.getElementById('dot-step-1');
+            const dot2 = document.getElementById('dot-step-2');
+            const subtitle = document.getElementById('form-subtitle');
+            const title = document.getElementById('form-title');
+
+            if (step === 2) {
+                // Basic validation before moving (mock)
+                const name = document.getElementById('fullName').value;
+                const email = document.getElementById('workEmail').value;
+                if (!name || !email) {
+                    // Quick flash effect on inputs if empty (simplified UX)
+                    document.getElementById('fullName').classList.add('border-error');
+                    setTimeout(() => document.getElementById('fullName').classList.remove('border-error'), 500);
+                    return;
+                }
+
+                // Transition out step 1
+                step1.classList.add('hidden');
+                
+                // Transition in step 2
+                step2.classList.remove('hidden');
+                step2.classList.add('step-enter');
+                
+                // Update UI Indicators
+                dot1.classList.replace('bg-primary', 'bg-surface-variant');
+                dot2.classList.replace('bg-surface-variant', 'bg-primary');
+                subtitle.textContent = "Step 2 of 2: Role Configuration";
+                title.textContent = "Select Profile";
+
+            } else {
+                // Transition out step 2
+                step2.classList.add('hidden');
+                step2.classList.remove('step-enter');
+                
+                // Transition in step 1
+                step1.classList.remove('hidden');
+                step1.classList.add('step-enter'); // re-trigger animation
+                setTimeout(() => step1.classList.remove('step-enter'), 400);
+
+                // Update UI Indicators
+                dot2.classList.replace('bg-primary', 'bg-surface-variant');
+                dot1.classList.replace('bg-surface-variant', 'bg-primary');
+                subtitle.textContent = "Step 1 of 2: Account Basics";
+                title.textContent = "Create Account";
+            }
+        }
+    </script>
+</body></html>

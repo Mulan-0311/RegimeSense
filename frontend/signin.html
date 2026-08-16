@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign In - RegimeSense</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary-fixed": "#001d33",
+                        "surface-container-high": "#262a30",
+                        "surface-container": "#1b2026",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#dfe3ea",
+                        "primary": "#98cbff",
+                        "outline-variant": "#3f4852",
+                        "surface-tint": "#98cbff",
+                        "on-surface": "#dfe3ea",
+                        "surface-container-low": "#171c22",
+                        "secondary-fixed-dim": "#4edea3",
+                        "secondary-fixed": "#6ffbbe",
+                        "surface-container-lowest": "#0a0f14",
+                        "on-error": "#690005",
+                        "on-primary-fixed-variant": "#004a77",
+                        "secondary": "#4edea3",
+                        "regime-amber": "#ffba38",
+                        "inverse-primary": "#00629d",
+                        "background": "#0f1419",
+                        "primary-fixed-dim": "#98cbff",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#30353b",
+                        "outline": "#3f4852",
+                        "inverse-on-surface": "#2c3137",
+                        "on-secondary": "#003824",
+                        "bearish-red": "#ff1744",
+                        "on-tertiary-container": "#522900",
+                        "secondary-container": "#00a572",
+                        "on-tertiary": "#4d2600",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface": "#0f1419",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-tertiary-fixed": "#2f1500",
+                        "bullish-green": "#10b981",
+                        "on-surface-variant": "#bec7d4",
+                        "primary-container": "#00a3ff",
+                        "surface-bright": "#353a40",
+                        "tertiary": "#ffb77d",
+                        "surface-dim": "#0f1419",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#00375a",
+                        "primary-fixed": "#cfe5ff",
+                        "on-secondary-fixed": "#002113",
+                        "tertiary-container": "#eb8104",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "on-primary": "#003354",
+                        "tertiary-fixed": "#ffdcc3",
+                        "on-secondary-container": "#00311f",
+                        "on-background": "#dfe3ea",
+                        "surface-container-highest": "#30353b"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "section-gap": "120px",
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "unit": "4px",
+                        "margin-mobile": "20px"
+                    },
+                    fontFamily: {
+                        "display-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-caps": ["Geist"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "data-mono": ["Geist"]
+                    },
+                    fontSize: {
+                        "display-lg-mobile": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "headline-xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "600" }],
+                        "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.06em", fontWeight: "700" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "display-lg": ["64px", { lineHeight: "72px", letterSpacing: "-0.03em", fontWeight: "700" }],
+                        "data-mono": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom styles for animations and specific layer effects */
+        .glow-primary {
+            box-shadow: 0 0 40px -10px rgba(152, 203, 255, 0.15);
+        }
+        
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(63, 72, 82, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(63, 72, 82, 0.05) 1px, transparent 1px);
+        }
+
+        .ambient-light-1 {
+            background: radial-gradient(circle at top right, rgba(0, 163, 255, 0.08) 0%, transparent 40%);
+        }
+        
+        .ambient-light-2 {
+            background: radial-gradient(circle at bottom left, rgba(78, 222, 163, 0.03) 0%, transparent 40%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased relative overflow-hidden">
+<!-- Ambient Background Effects -->
+<div class="absolute inset-0 bg-grid-pattern pointer-events-none z-0"></div>
+<div class="absolute inset-0 ambient-light-1 pointer-events-none z-0"></div>
+<div class="absolute inset-0 ambient-light-2 pointer-events-none z-0"></div>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex items-center justify-center p-margin-mobile md:p-margin-desktop z-10">
+<!-- Login Container -->
+<div class="w-full max-w-[480px]">
+<!-- Brand Header -->
+<div class="text-center mb-8 flex flex-col items-center">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface tracking-tight">RegimeSense</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface mb-2">Terminal Access</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Secure authentication for institutional clients.</p>
+</div>
+<!-- Central Card (Interactive Layer) -->
+<div class="bg-surface-container border border-outline/50 rounded-xl p-8 backdrop-blur-md glow-primary">
+<form action="dashboard.html" class="space-y-6" method="GET">
+<!-- Email Input -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-2" for="email">Institutional Email</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline-variant text-[20px]">mail</span>
+</div>
+<input class="w-full bg-surface-container-lowest border border-outline rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface placeholder:text-outline-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-none" id="email" name="email" placeholder="analyst@institution.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password Input -->
+<div>
+<div class="flex items-center justify-between mb-2">
+<label class="block font-label-caps text-label-caps text-on-surface-variant" for="password">Password</label>
+<a class="font-label-caps text-label-caps text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline-variant text-[20px]">lock</span>
+</div>
+<input class="w-full bg-surface-container-lowest border border-outline rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface placeholder:text-outline-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-none" id="password" name="password" placeholder="••••••••••••" required="" type="password"/>
+</div>
+</div>
+<!-- Primary CTA -->
+<button class="w-full bg-primary text-on-primary font-label-caps text-label-caps py-4 rounded-lg hover:bg-primary-container hover:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 mt-2" type="submit">
+<span>Sign In Securely</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline/50"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="px-4 bg-surface-container font-label-caps text-label-caps text-outline-variant">Or</span>
+</div>
+</div>
+<!-- Secondary CTA (SSO) -->
+<button class="w-full bg-transparent border border-outline text-on-surface font-label-caps text-label-caps py-4 rounded-lg hover:border-primary hover:text-primary transition-colors duration-200 flex items-center justify-center gap-3" type="button">
+<span class="material-symbols-outlined text-[20px]">domain</span>
+<span>Sign In with SSO</span>
+</button>
+</div>
+<!-- Security Indicator & Links -->
+<div class="mt-8 flex flex-col items-center space-y-4">
+<div class="flex items-center gap-2 font-data-mono text-data-mono text-on-surface-variant/70">
+<div class="w-2 h-2 rounded-full bg-bullish-green relative">
+<div class="absolute inset-0 rounded-full bg-bullish-green animate-ping opacity-75"></div>
+</div>
+<span>End-to-End Encrypted Session</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-center">
+                    New to RegimeSense? <br class="md:hidden"/>
+<a class="text-primary hover:underline hover:text-primary-container transition-colors ml-1" href="signup.html">Create an Account</a>
+</p>
+</div>
+</div>
+</main>
+</body></html>

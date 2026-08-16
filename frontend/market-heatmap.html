@@ -1,0 +1,432 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Market Regime Heatmap - RegimeSense</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Geist:wght@500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#005226",
+                    "on-secondary-fixed": "#00210b",
+                    "surface-container-highest": "#30353b",
+                    "secondary": "#7dffa2",
+                    "surface-bright": "#353a40",
+                    "on-primary-fixed-variant": "#004a77",
+                    "secondary-container": "#05e777",
+                    "on-background": "#dfe3ea",
+                    "secondary-fixed-dim": "#00e475",
+                    "on-surface-variant": "#bec7d4",
+                    "on-tertiary-fixed": "#281900",
+                    "on-primary": "#003354",
+                    "surface-dim": "#0f1419",
+                    "primary": "#98cbff",
+                    "secondary-fixed": "#62ff96",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#262a30",
+                    "on-tertiary-fixed-variant": "#604100",
+                    "on-primary-container": "#00375a",
+                    "error": "#ffb4ab",
+                    "outline-variant": "#3f4852",
+                    "on-secondary": "#003918",
+                    "primary-container": "#00a3ff",
+                    "on-surface": "#dfe3ea",
+                    "background": "#0f1419",
+                    "tertiary-fixed": "#ffdeac",
+                    "outline": "#88919d",
+                    "on-tertiary": "#432c00",
+                    "inverse-surface": "#dfe3ea",
+                    "surface-container-low": "#171c22",
+                    "inverse-on-surface": "#2c3137",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-container": "#cf9100",
+                    "surface-variant": "#30353b",
+                    "on-tertiary-container": "#483000",
+                    "on-primary-fixed": "#001d33",
+                    "on-error": "#690005",
+                    "inverse-primary": "#00629d",
+                    "surface-container-lowest": "#0a0f14",
+                    "surface-tint": "#98cbff",
+                    "surface": "#0f1419",
+                    "tertiary": "#ffba38",
+                    "primary-fixed": "#cfe5ff",
+                    "surface-container": "#1b2026",
+                    "tertiary-fixed-dim": "#ffba38",
+                    "primary-fixed-dim": "#98cbff",
+                    "on-secondary-container": "#00622e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "12px",
+                    "container-padding": "16px",
+                    "unit": "4px",
+                    "margin-desktop": "24px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-sm": [
+                            "Inter"
+                    ],
+                    "data-mono": [
+                            "Geist"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Inter"
+                    ],
+                    "label-caps": [
+                            "Geist"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "headline-sm": [
+                            "18px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "data-mono": [
+                            "13px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-caps": [
+                            "10px",
+                            {
+                                    "lineHeight": "12px",
+                                    "letterSpacing": "0.06em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #121212;
+            color: #dfe3ea;
+        }
+        .card-level-1 {
+            background-color: #1E1E1E;
+            border: 1px solid #2A2A2A;
+        }
+        .regime-bullish { background-color: rgba(0, 230, 118, 0.15); border: 1px solid rgba(0, 230, 118, 0.4); color: #7dffa2; }
+        .regime-bearish { background-color: rgba(255, 23, 68, 0.15); border: 1px solid rgba(255, 23, 68, 0.4); color: #ffb4ab; }
+        .regime-sideways { background-color: rgba(136, 145, 157, 0.15); border: 1px solid rgba(136, 145, 157, 0.4); color: #bec7d4; }
+        .regime-volatile { background-color: rgba(255, 186, 56, 0.15); border: 1px solid rgba(255, 186, 56, 0.4); color: #ffba38; }
+        
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #00E676;
+            box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(0, 230, 118, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
+        }
+        
+        /* Custom scrollbar for data dense areas */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #121212; }
+        ::-webkit-scrollbar-thumb { background: #3f4852; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #88919d; }
+    </style>
+</head>
+<body class="font-body-md text-body-md min-h-screen flex flex-col antialiased overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface text-primary dark:text-primary font-body-md text-body-md docked full-width top-0 border-b border-outline-variant dark:border-outline-variant flat no shadows transition-all duration-200 ease-in-out flex justify-between items-center w-full px-margin-desktop h-16 z-50 fixed">
+<div class="flex items-center gap-6">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary tracking-tight">RegimeSense</span>
+<!-- Desktop Navigation Links -->
+<div class="hidden md:flex items-center gap-1 h-full mt-[2px]">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors px-3 py-4" href="#">Dashboard</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors px-3 py-4" href="#">Portfolio Impact</a>
+<a class="text-primary dark:text-primary border-b-2 border-primary dark:border-primary pb-[14px] px-3 pt-4 font-semibold" href="#">Regime Analysis</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors px-3 py-4" href="#">Risk Core</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors px-3 py-4" href="#">Audit</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<!-- Search Bar (on_left config implies left of actions) -->
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="bg-[#161616] border border-outline-variant text-on-surface text-sm rounded-DEFAULT pl-9 pr-3 py-1.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 placeholder:text-outline transition-colors" placeholder="Search ticker or sector..." type="text">
+</div>
+<button class="bg-primary hover:bg-primary-fixed text-on-primary font-body-sm text-body-sm font-semibold py-1.5 px-4 rounded-DEFAULT transition-colors">
+                Trade Exec
+            </button>
+<div class="flex items-center gap-2 border-l border-outline-variant pl-4 ml-2">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-variant border border-outline-variant ml-2 overflow-hidden cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a financial portfolio manager in a dark, high-end institutional setting. Subtle cool lighting, sharp focus, corporate attire. High-contrast, moody aesthetic consistent with a dark-mode SaaS platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYTSmdwPsYbancfcKejnFmeAaAdUKjqP0DprDL9R0GjdAqWL7P_i_CYot-imRh3pNlsj7A9NSIvlwK35JQMiIOn3YZOYD3CxeFGnAFU5EGLTFRQPKdC2TeAKJtlgkv-vbjq2qpRQlWp2z1bfEe1AoJ7bQBPLUp6g0szxkibGQIijRrrC_7NJkEjZYC1qtj3GGqoRyLph7mGhAEShvKBJNID19x_BaV6KnHpTVvToCiHo6T5etwWzEBXg">
+</div>
+</div>
+</div>
+</nav>
+<div class="flex flex-1 pt-16 h-screen w-full">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col py-gutter bg-surface-container-low dark:bg-surface-container-low text-primary dark:text-primary font-label-caps text-label-caps fixed left-0 top-16 h-[calc(100vh-64px)] w-64 border-r border-outline-variant dark:border-outline-variant flat no shadows scale-98 active:scale-95 transition-transform z-40">
+<div class="px-container-padding mb-6 mt-2 flex items-center gap-3">
+<div class="h-10 w-10 rounded-DEFAULT bg-[#1E1E1E] border border-[#2A2A2A] flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface m-0 leading-tight">Institutional Terminal</h2>
+<span class="font-data-mono text-[10px] text-outline mt-1 block">V2.4.0-Stable</span>
+</div>
+</div>
+<div class="px-container-padding mb-6">
+<button class="w-full bg-surface-variant border border-outline-variant hover:border-primary text-on-surface font-body-sm text-body-sm py-2 rounded-DEFAULT transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                    New Simulation
+                </button>
+</div>
+<nav class="flex-1 flex flex-col gap-1 px-2 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">analytics</span>
+<span class="tracking-widest">Strategy Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT bg-surface-bright dark:bg-surface-bright text-primary dark:text-primary border-l-4 border-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">query_stats</span>
+<span class="tracking-widest">Regime Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">shutter_speed</span>
+<span class="tracking-widest">Stress Tests</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">pie_chart</span>
+<span class="tracking-widest">Asset Allocation</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">description</span>
+<span class="tracking-widest">Reports</span>
+</a>
+</nav>
+<div class="px-2 mt-auto pt-4 border-t border-outline-variant">
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span class="tracking-widest">Support</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant dark:hover:bg-surface-variant text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">security</span>
+<span class="tracking-widest">API Status</span>
+<div class="pulse-dot ml-auto"></div>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 bg-[#121212] overflow-y-auto p-margin-desktop h-full relative">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-6">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface mb-1">Market Regime Heatmap</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Real-time regime classification for major indices and top 50 equities.</p>
+</div>
+<div class="flex gap-2">
+<div class="flex items-center gap-2 card-level-1 px-3 py-1.5 rounded-DEFAULT">
+<span class="font-body-sm text-body-sm text-outline">Market Sentiment:</span>
+<span class="font-data-mono text-data-mono text-secondary font-bold">RISK ON</span>
+</div>
+<div class="flex items-center gap-2 card-level-1 px-3 py-1.5 rounded-DEFAULT">
+<span class="font-body-sm text-body-sm text-outline">Breadth (Bullish):</span>
+<span class="font-data-mono text-data-mono text-on-surface">68%</span>
+</div>
+</div>
+</div>
+<!-- Top Section: Major Indices Cards -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+<!-- Index Card 1 -->
+<div class="card-level-1 p-4 rounded-DEFAULT flex flex-col justify-between h-24 hover:bg-[#222222] transition-colors cursor-pointer group">
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant group-hover:text-on-surface transition-colors">NIFTY 50</span>
+<span class="material-symbols-outlined text-[16px] text-secondary">trending_up</span>
+</div>
+<div>
+<div class="font-data-mono text-data-mono text-on-surface mb-1">22,450.15</div>
+<div class="inline-flex items-center px-1.5 py-0.5 rounded-sm regime-bullish font-data-mono text-[10px] leading-tight">
+                            Bullish
+                        </div>
+</div>
+</div>
+<!-- Index Card 2 -->
+<div class="card-level-1 p-4 rounded-DEFAULT flex flex-col justify-between h-24 hover:bg-[#222222] transition-colors cursor-pointer group">
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant group-hover:text-on-surface transition-colors">BANK NIFTY</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary">swap_horiz</span>
+</div>
+<div>
+<div class="font-data-mono text-data-mono text-on-surface mb-1">47,890.50</div>
+<div class="inline-flex items-center px-1.5 py-0.5 rounded-sm regime-volatile font-data-mono text-[10px] leading-tight">
+                            Volatile
+                        </div>
+</div>
+</div>
+<!-- Index Card 3 -->
+<div class="card-level-1 p-4 rounded-DEFAULT flex flex-col justify-between h-24 hover:bg-[#222222] transition-colors cursor-pointer group">
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant group-hover:text-on-surface transition-colors">GOLD COMEX</span>
+<span class="material-symbols-outlined text-[16px] text-secondary">trending_up</span>
+</div>
+<div>
+<div class="font-data-mono text-data-mono text-on-surface mb-1">2,340.20</div>
+<div class="inline-flex items-center px-1.5 py-0.5 rounded-sm regime-bullish font-data-mono text-[10px] leading-tight">
+                            Bullish
+                        </div>
+</div>
+</div>
+<!-- Index Card 4 -->
+<div class="card-level-1 p-4 rounded-DEFAULT flex flex-col justify-between h-24 hover:bg-[#222222] transition-colors cursor-pointer group">
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant group-hover:text-on-surface transition-colors">CRUDE WTI</span>
+<span class="material-symbols-outlined text-[16px] text-error">trending_down</span>
+</div>
+<div>
+<div class="font-data-mono text-data-mono text-on-surface mb-1">82.45</div>
+<div class="inline-flex items-center px-1.5 py-0.5 rounded-sm regime-bearish font-data-mono text-[10px] leading-tight">
+                            Bearish
+                        </div>
+</div>
+</div>
+<!-- Index Card 5 -->
+<div class="card-level-1 p-4 rounded-DEFAULT flex flex-col justify-between h-24 hover:bg-[#222222] transition-colors cursor-pointer group">
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant group-hover:text-on-surface transition-colors">USD/INR</span>
+<span class="material-symbols-outlined text-[16px] text-outline">remove</span>
+</div>
+<div>
+<div class="font-data-mono text-data-mono text-on-surface mb-1">83.25</div>
+<div class="inline-flex items-center px-1.5 py-0.5 rounded-sm regime-sideways font-data-mono text-[10px] leading-tight">
+                            Sideways
+                        </div>
+</div>
+</div>
+</div>
+<!-- Heatmap Controls -->
+<div class="flex justify-between items-center mb-4 card-level-1 p-2 rounded-DEFAULT">
+<div class="flex gap-1">
+<button class="px-3 py-1 bg-[#2A2A2A] text-on-surface font-body-sm text-body-sm rounded-sm hover:bg-[#3f4852] transition-colors">Group: Sector</button>
+<button class="px-3 py-1 bg-transparent text-on-surface-variant font-body-sm text-body-sm rounded-sm hover:bg-[#2A2A2A] transition-colors">Sort: Regime Strength</button>
+<button class="px-3 py-1 bg-transparent text-on-surface-variant font-body-sm text-body-sm rounded-sm hover:bg-[#2A2A2A] transition-colors">Sort: Market Cap</button>
+</div>
+<div class="flex items-center gap-3 px-2">
+<div class="flex items-center gap-1 font-body-sm text-[10px] text-on-surface-variant"><div class="w-3 h-3 regime-bullish rounded-sm border"></div> Bullish</div>
+<div class="flex items-center gap-1 font-body-sm text-[10px] text-on-surface-variant"><div class="w-3 h-3 regime-bearish rounded-sm border"></div> Bearish</div>
+<div class="flex items-center gap-1 font-body-sm text-[10px] text-on-surface-variant"><div class="w-3 h-3 regime-sideways rounded-sm border"></div> Sideways</div>
+<div class="flex items-center gap-1 font-body-sm text-[10px] text-on-surface-variant"><div class="w-3 h-3 regime-volatile rounded-sm border"></div> Volatile</div>
+</div>
+</div>
+<!-- Heatmap Grid Container -->
+<div class="card-level-1 p-1 rounded-DEFAULT">
+<!-- Sector Section: Financials -->
+<div class="mb-2">
+<div class="px-2 py-1 font-label-caps text-[10px] text-outline border-b border-[#2A2A2A] mb-1">FINANCIALS</div>
+<div class="grid grid-cols-5 md:grid-cols-10 gap-1 p-1">
+<!-- Generative Cells for Heatmap -->
+<div class="h-12 regime-bullish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">HDFCBANK</div>
+<div class="h-12 regime-bullish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">ICICIBANK</div>
+<div class="h-12 regime-volatile rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">SBIN</div>
+<div class="h-12 regime-bullish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">KOTAKBANK</div>
+<div class="h-12 regime-bearish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">AXISBANK</div>
+<div class="h-12 regime-sideways rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">BAJFINANCE</div>
+<div class="h-12 regime-bullish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">BAJAJFINSV</div>
+<div class="h-12 regime-volatile rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">INDUSINDBK</div>
+<div class="h-12 regime-bearish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">HDFCLIFE</div>
+<div class="h-12 regime-sideways rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">SBILIFE</div>
+</div>
+</div>
+<!-- Sector Section: IT -->
+<div class="mb-2">
+<div class="px-2 py-1 font-label-caps text-[10px] text-outline border-b border-[#2A2A2A] mb-1">INFORMATION TECHNOLOGY</div>
+<div class="grid grid-cols-5 md:grid-cols-10 gap-1 p-1">
+<div class="h-12 regime-bearish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">TCS</div>
+<div class="h-12 regime-bearish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">INFY</div>
+<div class="h-12 regime-sideways rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">HCLTECH</div>
+<div class="h-12 regime-bearish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">WIPRO</div>
+<div class="h-12 regime-volatile rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">TECHM</div>
+<div class="h-12 regime-sideways rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">LTIM</div>
+</div>
+</div>
+<!-- Sector Section: Energy -->
+<div class="mb-2">
+<div class="px-2 py-1 font-label-caps text-[10px] text-outline border-b border-[#2A2A2A] mb-1">ENERGY &amp; UTILITIES</div>
+<div class="grid grid-cols-5 md:grid-cols-10 gap-1 p-1">
+<div class="h-12 regime-bullish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">RELIANCE</div>
+<div class="h-12 regime-bullish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">ONGC</div>
+<div class="h-12 regime-bullish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">NTPC</div>
+<div class="h-12 regime-volatile rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">POWERGRID</div>
+<div class="h-12 regime-sideways rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">BPCL</div>
+<div class="h-12 regime-bullish rounded-sm flex items-center justify-center font-data-mono text-data-mono hover:brightness-110 cursor-pointer transition-all border">COALINDIA</div>
+</div>
+</div>
+</div>
+<!-- Empty space for scrolling -->
+<div class="h-24"></div>
+</main>
+</div>
+
+
+</body></html>

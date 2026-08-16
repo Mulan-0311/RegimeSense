@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+.DS_Store
+.agents/
+.kilocode/
+testsprite_tests/
+backend/regime_sense.db
