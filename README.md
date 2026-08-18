@@ -1,11 +1,3 @@
-<div align="center">
-
-<img src="https://img.shields.io/badge/RegimeSense-v1.0.0-00d4ff?style=for-the-badge&logo=googleanalytics&logoColor=white"/>
-<img src="https://img.shields.io/badge/Quant_Finance-Algorithmic_Trading-ff3366?style=for-the-badge"/>
-<img src="https://img.shields.io/badge/Institutional-Grade-00ff88?style=for-the-badge"/>
-
-<br/>
-
 ```
 ██████╗ ███████╗ ██████╗ ██╗███╗   ███╗███████╗███████╗███████╗███╗   ██╗███████╗███████╗
 ██╔══██╗██╔════╝██╔════╝ ██║████╗ ████║██╔════╝██╔════╝██╔════╝████╗  ██║██╔════╝██╔════╝
@@ -14,6 +6,13 @@
 ██║  ██║███████╗╚██████╔╝██║██║ ╚═╝ ██║███████╗███████║███████╗██║ ╚████║███████║███████╗
 ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═══╝╚══════╝╚══════╝
 ```
+<div align="center">
+
+<img src="https://img.shields.io/badge/RegimeSense-v1.0.0-00d4ff?style=for-the-badge&logo=googleanalytics&logoColor=white"/>
+<img src="https://img.shields.io/badge/Quant_Finance-Algorithmic_Trading-ff3366?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Institutional-Grade-00ff88?style=for-the-badge"/>
+
+<br/>
 
 ### Institutional-Grade Market Regime Classifier & AI Quant Copilot
 
