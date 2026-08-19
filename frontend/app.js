@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupNavigation();
     setupEventListeners();
     refreshMarketData();
-    renderTickerBar();
     initAiChatUI();
   }
 
@@ -154,27 +153,39 @@ document.addEventListener('DOMContentLoaded', () => {
   /* --------------------------------------------------------------------------
      Market Data Refresh & Dashboard Rendering
      -------------------------------------------------------------------------- */
-  function refreshMarketData() {
-    state.marketData = window.DataEngine.generateMarketHistory(state.asset, state.period);
-    
-    // Update KPI Card Values
-    const currentRegime = state.marketData.currentRegime;
-    document.getElementById('kpiRegime').textContent = currentRegime.name;
-    document.getElementById('kpiRegime').style.color = currentRegime.color;
-    document.getElementById('kpiRegimeDuration').textContent = `${state.marketData.regimeDaysCounter} Days`;
+  async function refreshMarketData() {
+    const kpiRegime = document.getElementById('kpiRegime');
+    if (kpiRegime) kpiRegime.textContent = "Loading live data...";
 
-    // Sidebar Regime Update
-    document.getElementById('sidebarRegimeName').textContent = currentRegime.name.toUpperCase();
-    document.getElementById('sidebarRegimeName').style.color = currentRegime.color;
+    try {
+      state.marketData = await window.DataEngine.fetchMarketData(state.asset, state.period);
+      
+      // Update KPI Card Values
+      const currentRegime = state.marketData.currentRegime;
+      document.getElementById('kpiRegime').textContent = currentRegime.name;
+      document.getElementById('kpiRegime').style.color = currentRegime.color;
+      document.getElementById('kpiRegimeDuration').textContent = `${state.marketData.regimeDaysCounter} Days`;
 
-    // Render Dashboard Charts
-    renderTimelineChart();
-    renderTransitionMatrix();
-    renderAlertsFeed();
+      // Sidebar Regime Update
+      const sidebarRegime = document.getElementById('sidebarRegimeName');
+      if (sidebarRegime) {
+        sidebarRegime.textContent = currentRegime.name.toUpperCase();
+        sidebarRegime.style.color = currentRegime.color;
+      }
 
-    if (state.activeTab === 'analytics') renderAnalyticsCharts();
-    if (state.activeTab === 'portfolio') renderPortfolioCharts();
-    if (state.activeTab === 'backtest') renderBacktestCharts();
+      // Render Dashboard Charts
+      renderTickerBar();
+      renderTimelineChart();
+      renderTransitionMatrix();
+      renderAlertsFeed();
+
+      if (state.activeTab === 'analytics') renderAnalyticsCharts();
+      if (state.activeTab === 'portfolio') renderPortfolioCharts();
+      if (state.activeTab === 'backtest') renderBacktestCharts();
+    } catch (error) {
+      console.error("Failed to fetch market data:", error);
+      if (kpiRegime) kpiRegime.textContent = "Data Error";
+    }
   }
 
   /* --------------------------------------------------------------------------
@@ -183,9 +194,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderTickerBar() {
     const tickerContainer = document.getElementById('tickerScroll');
     if (!tickerContainer) return;
+    
+    // Use the live latest price from our fetched data!
+    const latestPrice = state.marketData.prices[state.marketData.prices.length - 1] || 0;
+    const prevPrice = state.marketData.prices[state.marketData.prices.length - 2] || latestPrice;
+    const pctChange = (((latestPrice - prevPrice) / prevPrice) * 100).toFixed(2);
+    const pos = pctChange >= 0;
 
     const tickerItems = [
-      { symbol: 'S&P 500', price: '5,420.50', change: '+0.84%', pos: true },
+      { symbol: 'LIVE ASSET', price: latestPrice.toLocaleString(), change: `${pctChange}%`, pos: pos },
       { symbol: 'NASDAQ 100', price: '19,812.20', change: '+1.15%', pos: true },
       { symbol: 'VIX INDEX', price: '12.42', change: '-4.20%', pos: false },
       { symbol: '10Y TREASURY', price: '4.24%', change: '-0.02%', pos: false },

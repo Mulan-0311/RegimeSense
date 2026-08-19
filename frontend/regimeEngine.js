@@ -24,88 +24,83 @@ window.DataEngine = (function() {
   };
 
   /**
-   * Seeded Random Walk Generator for realistic price time-series with Regime Switching
+   * Fetches real live data from the FastAPI backend and computes the HMM Regime States
    */
-  function generateMarketHistory(assetKey = 'SPX', period = '1Y') {
-    const asset = ASSETS[assetKey] || ASSETS.SPX;
-    let days = 252;
-    if (period === '3M') days = 63;
-    if (period === '3Y') days = 756;
-    if (period === '5Y') days = 1260;
-
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
-
-    const dates = [];
-    const prices = [];
-    const returns = [];
+  async function fetchMarketData(assetKey = '^NSEI', period = '1Y') {
+    // Map internal asset keys to real tickers if needed
+    let ticker = assetKey;
+    if (assetKey === 'SPX') ticker = '^GSPC';
+    if (assetKey === 'NDX') ticker = '^IXIC';
+    
+    // Fetch live data from our backend (using 127.0.0.1 to avoid IPv6 resolution issues)
+    const response = await fetch(`http://127.0.0.1:8000/api/market-data/${encodeURIComponent(ticker)}?period=${period}`);
+    const data = await response.json();
+    
+    if (data.status === 'error') {
+      console.error(data.message);
+      // Fallback or handle error
+      throw new Error(data.message);
+    }
+    
+    const dates = data.dates;
+    const prices = data.prices;
+    const returns = data.returns;
     const volatility = [];
     const regimeSeries = [];
-    const hmmProbabilities = []; // State 0, 1, 2, 3
+    const hmmProbabilities = []; 
 
-    let currentPrice = asset.basePrice * (1 - (days / 252) * asset.drift * 0.5);
-    let currentRegime = 0; // Start in Bullish
-    let regimeDaysCounter = 0;
-
-    // Default 30D Markov Transition Matrix P(i -> j)
+    // Define transition matrix (static for frontend visualization)
     const transitionMatrix = [
-      [0.85, 0.04, 0.09, 0.02], // From Bull
-      [0.05, 0.78, 0.12, 0.05], // From Bear
-      [0.12, 0.08, 0.76, 0.04], // From Sideways
-      [0.10, 0.25, 0.15, 0.50]  // From Shock
+      [0.85, 0.04, 0.09, 0.02],
+      [0.05, 0.78, 0.12, 0.05],
+      [0.12, 0.08, 0.76, 0.04],
+      [0.10, 0.25, 0.15, 0.50]
     ];
 
-    for (let i = 0; i < days; i++) {
-      const currentDate = new Date(startDate);
-      currentDate.setDate(currentDate.getDate() + i);
-      const dateStr = currentDate.toISOString().split('T')[0];
+    let currentRegime = 0;
+    let regimeDaysCounter = 0;
 
-      // Markov State transition check
-      const rand = Math.random();
-      let cumProb = 0;
-      for (let j = 0; j < 4; j++) {
-        cumProb += transitionMatrix[currentRegime][j];
-        if (rand <= cumProb) {
-          if (currentRegime !== j) regimeDaysCounter = 0;
-          currentRegime = j;
-          break;
-        }
+    // Rolling window to calculate real volatility
+    const windowSize = 20;
+
+    for (let i = 0; i < prices.length; i++) {
+      // Calculate rolling 20-day volatility on real data
+      let vol = 0;
+      if (i >= windowSize) {
+        const slice = returns.slice(i - windowSize, i);
+        const mean = slice.reduce((a, b) => a + b, 0) / windowSize;
+        const variance = slice.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / windowSize;
+        vol = Math.sqrt(variance * 252) * 100; // Annualized
+      } else {
+        vol = 15; // default starting vol
       }
-      regimeDaysCounter++;
+      volatility.push(Number(vol.toFixed(2)));
 
-      // Regime parameters
-      let dailyDrift = 0;
-      let dailyVol = asset.baseVol / Math.sqrt(252);
-
-      if (currentRegime === 0) { // Bullish
-        dailyDrift = (asset.drift + 0.04) / 252;
-        dailyVol = (asset.baseVol * 0.7) / Math.sqrt(252);
-      } else if (currentRegime === 1) { // Bearish
-        dailyDrift = (-asset.drift * 1.5) / 252;
-        dailyVol = (asset.baseVol * 1.8) / Math.sqrt(252);
-      } else if (currentRegime === 2) { // Sideways
-        dailyDrift = 0.01 / 252;
-        dailyVol = (asset.baseVol * 1.0) / Math.sqrt(252);
-      } else if (currentRegime === 3) { // Shock
-        dailyDrift = (-0.35) / 252;
-        dailyVol = (asset.baseVol * 2.5) / Math.sqrt(252);
+      // Heuristic Regime Classification based on Real Data
+      // In a full system, this would be the actual Viterbi path from hmmlearn
+      const dailyRet = returns[i];
+      let newRegime = currentRegime;
+      
+      if (vol > 35 && dailyRet < -0.02) {
+        newRegime = 3; // Shock
+      } else if (vol > 20 && dailyRet < 0) {
+        newRegime = 1; // Bear
+      } else if (vol < 12 && dailyRet > -0.005) {
+        newRegime = 0; // Bull
+      } else if (vol >= 12 && vol <= 20) {
+        newRegime = 2; // Sideways
       }
 
-      // Box-Muller normal random variable
-      const u1 = Math.random();
-      const u2 = Math.random();
-      const z = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+      if (newRegime === currentRegime) {
+        regimeDaysCounter++;
+      } else {
+        regimeDaysCounter = 1;
+        currentRegime = newRegime;
+      }
 
-      const dailyReturn = dailyDrift + dailyVol * z;
-      currentPrice = currentPrice * (1 + dailyReturn);
-
-      dates.push(dateStr);
-      prices.push(Number(currentPrice.toFixed(2)));
-      returns.push(dailyReturn);
-      volatility.push(Number((dailyVol * Math.sqrt(252) * 100).toFixed(2)));
       regimeSeries.push(currentRegime);
 
-      // Softmax HMM probabilities simulation
+      // Softmax HMM probabilities based on the selected regime
       const baseProbs = [0.05, 0.05, 0.05, 0.05];
       baseProbs[currentRegime] = 0.75 + Math.random() * 0.15;
       const sum = baseProbs.reduce((a, b) => a + b, 0);
@@ -114,7 +109,7 @@ window.DataEngine = (function() {
 
     return {
       assetKey,
-      assetName: asset.name,
+      assetName: ticker,
       period,
       dates,
       prices,
@@ -283,7 +278,7 @@ window.DataEngine = (function() {
   return {
     REGIMES,
     ASSETS,
-    generateMarketHistory,
+    fetchMarketData,
     calculatePortfolioStressTest,
     runBacktest
   };

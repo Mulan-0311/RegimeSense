@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from database import SessionLocal, init_db, Trade
 from pydantic import BaseModel
 from typing import List
+from data_feed import get_live_market_data
 
 app = FastAPI(title="RegimeSense Backend API")
 
@@ -35,6 +36,17 @@ class TradeSchema(BaseModel):
 @app.get("/")
 def read_root():
     return {"message": "Welcome to RegimeSense Analytics API"}
+
+@app.get("/api/market-data/{symbol}")
+def get_market_data(symbol: str, period: str = "1Y"):
+    """
+    Endpoint to fetch live market data for a given symbol.
+    Example symbols: ^NSEI (Nifty 50), RELIANCE.NS, AAPL
+    """
+    data = get_live_market_data(symbol, period)
+    if data.get("status") == "error":
+        raise HTTPException(status_code=400, detail=data.get("message"))
+    return data
 
 @app.post("/trades/", response_model=TradeSchema)
 def create_trade(trade: TradeSchema, db: Session = Depends(get_db)):
