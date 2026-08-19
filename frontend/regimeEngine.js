@@ -32,8 +32,8 @@ window.DataEngine = (function() {
     if (assetKey === 'SPX') ticker = '^GSPC';
     if (assetKey === 'NDX') ticker = '^IXIC';
     
-    // Fetch live data from our backend (using 127.0.0.1 to avoid IPv6 resolution issues)
-    const response = await fetch(`http://127.0.0.1:8000/api/market-data/${encodeURIComponent(ticker)}?period=${period}`);
+    // Fetch live data from our deployed Render backend
+    const response = await fetch(`https://regimesense-backend.onrender.com/api/market-data/${encodeURIComponent(ticker)}?period=${period}`);
     const data = await response.json();
     
     if (data.status === 'error') {
